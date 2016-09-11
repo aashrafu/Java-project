@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>YourApp</title>
+<script src="js/jquery-3.1.0.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/offcanvas.css" rel="stylesheet">
+</head>
+<body>
+	<div id="header"></div>
+
+	<div class="container">
+	<div class="row row-offcanvas row-offcanvas-right">
+ 		<div class="col-xs-12 col-sm-9">
+ 		
+		<div class="jumbotron">
+            <h1>Hello, world!</h1>
+            <p>This is an example to show the potential of an offcanvas layout pattern in Bootstrap. Try some responsive-range viewport sizes to see it in action.</p>
+          </div>
+		</div>
+		<div id="sidebar"></div>
+	</div>
+	</div>
+</body>
+
+<script>
+	$('#post').click(function() {
+		if (!$("#data").val()) {
+			alert("Enter your data!");
+		} else {
+			$.ajax({
+				type : "POST",
+				cache : false,
+				url : '/persist',
+				data : {
+					'data' : $("#data").val()
+				},
+				success : function(response) {
+					$('#get').click();
+				}
+			});
+		}
+
+	});
+</script>
+
+<script>
+	$(function() {
+		$("#header").load("header.html");
+		$("#sidebar").load("sidebar.html");
+	});
+</script>
+</html>
