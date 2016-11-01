@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>YourApp</title>
+<script src="js/jquery-3.1.0.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<link href="css/bootstrap.min.css" rel="stylesheet"></link>
+<link href="css/offcanvas.css" rel="stylesheet"></link>
+</head>
+<body>
+	<div id="header"></div>
+
+	<div class="container">
+	<div class="row row-offcanvas row-offcanvas-right">
+ 		<div class="col-xs-12 col-sm-9">
+ 		
+		<div class="jumbotron">
+			<h4><a href="addArticle">Add article</a></h4>
+        	<h3>Articles</h3>
+          	<div id="articles"></div>	
+          </div>
+		</div>
+		<div id="sidebar"></div>
+	</div>
+	</div>
+</body>
+
+<script>
+    $.ajax({
+        type: "GET",
+        cache: false,
+        url: '/allArticles',
+        data: "",
+        success: function (response) {
+            var html = "";
+            $('#articles').html(response.data); 
+        }
+    });
+</script>
+
+<script>
+	$(function() {
+		$("#header").load("header.html");
+		$("#sidebar").load("sidebar.html");
+	});
+</script>
+</html>
