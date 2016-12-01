@@ -18,7 +18,7 @@ public class ListForm<T extends DomainModel> {
 		StringBuilder sb = new StringBuilder();
 		for(T model : models)
 		{
-			sb.append("<a href='/article?id=").append(model.getId()).append("'>").append(model.toString()).append("</a><br>");
+			sb.append("<a href='/view_article?id=").append(model.getId()).append("'>").append(model.toString()).append("</a><br>");
 		}
 		
 		return sb.toString();

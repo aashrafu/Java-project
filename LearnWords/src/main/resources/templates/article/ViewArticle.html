@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>YourApp</title>
+<script src="js/jquery-3.1.0.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<link href="css/bootstrap.min.css" rel="stylesheet"></link>
+<link href="css/offcanvas.css" rel="stylesheet"></link>
+<link href="css/main.css" rel="stylesheet"></link>
+</head>
+<body>
+	<div id="header"></div>
+
+	<div class="container">
+		<div class="row row-offcanvas row-offcanvas-right">
+			<div class="col-xs-12 col-sm-9">
+
+				<div class="jumbotron">
+					<h3 id="title"></h3>
+					<br></br>
+					<div id="content"></div>
+					<br></br>
+					<div id="translation"></div>
+				</div>
+			</div>
+			<div id="sidebar"></div>
+		</div>
+	</div>
+</body>
+
+<script>
+	$.ajax({
+		type : "GET",
+		cache : false,
+		url : '/getArticle',
+		data : {
+			'id' : location.search.split('id=')[1]
+		},
+		success : function(response) {
+			$('#title').html(response.title);
+			$('#content').html(response.content);
+		}
+	});
+
+	function translate() {
+		var q = document.querySelectorAll(":hover");
+		var word = q[q.length - 1].innerHTML;
+		$.ajax({
+			type : "POST",
+			cache : false,
+			url : '/translate',
+			data : {
+				'word' : word,
+				'article' : location.search.split('id=')[1]
+			},
+			success : function(response) {
+				$('#translation').html(response.translation);
+			}
+		});
+	}
+</script>
+
+<script>
+	$(function() {
+		$("#header").load("header.html");
+		$("#sidebar").load("sidebar.html");
+	});
+</script>
+</html>

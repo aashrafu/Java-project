@@ -35,20 +35,19 @@ public class ArticleController {
 	@Qualifier("dictionaryService")
 	private DictionaryService dictionaryService;
 	
-	@RequestMapping(value = "/article", method = RequestMethod.GET)
+	@RequestMapping(value = "/view_article", method = RequestMethod.GET)
     public String showArticle(@RequestParam("id") String id, Model model) {
-		model.addAttribute("aaa", "aaa");
-        return "article";
+        return "article/ViewArticle";
     }
 	
-	@RequestMapping(value = "/articles", method = RequestMethod.GET)
+	@RequestMapping(value = "/list_articles", method = RequestMethod.GET)
     public String articles(Model model) {
-        return "articles";
+        return "article/ListArticles";
     }
 	
-	@RequestMapping(value = "/addArticle", method = RequestMethod.GET)
+	@RequestMapping(value = "/new_article", method = RequestMethod.GET)
     public String addArticle(Model model) {
-        return "addArticle";
+        return "article/NewArticle";
     }
 	
 	@RequestMapping(value = "/getArticle", method = RequestMethod.GET)
@@ -57,9 +56,10 @@ public class ArticleController {
 	        Map<String, String> response = new HashMap<String, String>();
 	        
 	        Article article = articleService.getById(id);
+	        String content = articleService.makeArticleTagged(article);
+	        
 	        response.put("result", "success");
 	        response.put("title", article.getTitle());
-	        String content = articleService.makeArticleTagged(article);
 	        response.put("content", content);
 	        
 			return response;
