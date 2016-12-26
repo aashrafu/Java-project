@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.learnwords.controller.ArticleController;
 import com.learnwords.dao.ArticleDAO;
 import com.learnwords.domain.Article;
 import com.learnwords.entity.ArticleEntity;
@@ -19,6 +21,8 @@ import com.learnwords.repository.ArticleRepositoryImpl;
 
 @Service("articleService")
 public class ArticleServiceImpl implements ArticleService {
+	
+	private static final Logger LOG = Logger.getLogger(ArticleController.class);
 
 	@Autowired
 	@Qualifier("articleRepository")
@@ -51,7 +55,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	public List<Article> getAll() {
-		return convertToModel(articleDAO.findAll());
+		return convertToModels(articleDAO.findAll());
 	}
 
 	public Article convertToModel(ArticleEntity entity) {
@@ -62,40 +66,39 @@ public class ArticleServiceImpl implements ArticleService {
 		return article;
 	}
 
-	public List<Article> convertToModel(List<ArticleEntity> entities) {
+	public List<Article> convertToModels(List<ArticleEntity> entities) {
 		List<Article> articles = new ArrayList<>();
 		for (ArticleEntity entity : entities) {
-			articles.add(new Article(entity.getId(), entity.getTitle()));
+			articles.add(convertToModel(entity));
 		}
 
 		return articles;
 	}
 
 	public String sendGet(String word) {
-		StringBuffer response = null;
-		try {
-		String url = "http://api.multillect.com/translate/plain/1.0/350?method=translate/api/translate&from=deu&to=rus&text="+word+"&sig=dc699cc607cb72c247154bb90cd9af56";
-
-		URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-		con.setRequestMethod("GET");
-
-		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);
-
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		response = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
-		}
-		in.close();
-
+		StringBuffer response = new StringBuffer();
+		try { 
+			String url = "http://api.multillect.com/translate/plain/1.0/350?method=translate/api/translate&from=deu&to=rus&text="+word+"&sig=dc699cc607cb72c247154bb90cd9af56";
+	
+			URL obj = new URL(url);
+			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+			con.setRequestMethod("GET");
+	
+			int responseCode = con.getResponseCode();
+			System.out.println("\nSending 'GET' request to URL : " + url);
+			System.out.println("Response Code : " + responseCode);
+	
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			response = new StringBuffer();
+	
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
 		
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			LOG.error("An error occured during connecting to translation server!");
 			e.printStackTrace();
 		}
 		

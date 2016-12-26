@@ -21,12 +21,9 @@ import com.learnwords.service.ArticleService;
 import com.learnwords.service.DictionaryService;
 import com.learnwords.utils.Ajax;
 import com.learnwords.utils.RestException;
-import com.learnwords.view.components.ListForm;
 
 @Controller
 public class ArticleController {
-	
-	private static final Logger LOG = Logger.getLogger(ArticleController.class);
 
 	@Autowired
 	@Qualifier("articleService")
@@ -35,49 +32,37 @@ public class ArticleController {
 	@Qualifier("dictionaryService")
 	private DictionaryService dictionaryService;
 	
-	@RequestMapping(value = "/view_article", method = RequestMethod.GET)
-    public String showArticle(@RequestParam("id") String id, Model model) {
-        return "article/ViewArticle";
-    }
-	
-	@RequestMapping(value = "/list_articles", method = RequestMethod.GET)
-    public String articles(Model model) {
-        return "article/ListArticles";
-    }
-	
-	@RequestMapping(value = "/new_article", method = RequestMethod.GET)
-    public String addArticle(Model model) {
-        return "article/NewArticle";
-    }
-	
-	@RequestMapping(value = "/getArticle", method = RequestMethod.GET)
-	public @ResponseBody Map<String, String> getArticle(@RequestParam("id") int id) throws RestException {
-		try {
-	        Map<String, String> response = new HashMap<String, String>();
-	        
-	        Article article = articleService.getById(id);
-	        String content = articleService.makeArticleTagged(article);
-	        
-	        response.put("result", "success");
-	        response.put("title", article.getTitle());
-	        response.put("content", content);
-	        
-			return response;
-		} catch (Exception e) {
-			throw new RestException(e);
-		}
+	@RequestMapping("/index")
+	public String articleList(Map<String, Object> map) {
+		
+		List<Article> articles = articleService.getAll();
+		map.put("articleList", articles);
+		
+		return "articleList";
 	}
 	
-	@RequestMapping(value = "/allArticles", method = RequestMethod.GET)
-	public @ResponseBody Map<String, String> allArticles() throws RestException {
-		try {
-			List<Article> result = articleService.getAll();
+	@RequestMapping("/newArticle")
+	public String newArticle(Map<String, Object> map) {	
+		
+		return "newArticle";
+	}
+	
+	@RequestMapping("/matchesTraining")
+	public String matchesTraining(Map<String, Object> map) {	
+		
+		return "matchesTraining";
+	}
+	
+	@RequestMapping(value = "/viewArticle", method = RequestMethod.GET)
+	public String viewArticle(@RequestParam("id") int id, Map<String, Object> map) throws RestException {
+        
+        Article article = articleService.getById(id);
+        String content = articleService.makeArticleTagged(article);
 
-			ListForm<Article> listForm = new ListForm<Article>(result);
-			return Ajax.successResponse(listForm.createForm());
-		} catch (Exception e) {
-			throw new RestException(e);
-		}
+        map.put("title", article.getTitle());
+        map.put("content", content);
+        
+		return "viewArticle";
 	}
 
 	@RequestMapping(value = "/translate", method = RequestMethod.POST)
@@ -118,16 +103,6 @@ public class ArticleController {
 			
 			articleService.persist(article);
 			return Ajax.emptyResponse();
-		} catch (Exception e) {
-			throw new RestException(e);
-		}
-	}
-
-	@RequestMapping(value = "/getRandomData", method = RequestMethod.GET)
-	public @ResponseBody Map<String, Object> getRandomData() throws RestException {
-		try {
-			Set<String> result = null;
-			return Ajax.successResponse(result);
 		} catch (Exception e) {
 			throw new RestException(e);
 		}
