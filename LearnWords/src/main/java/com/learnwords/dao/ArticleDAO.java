@@ -22,7 +22,7 @@ public class ArticleDAO<T> extends DAOGeneric<ArticleEntity>{
 	public List<ArticleEntity> findAll() {
 		em.getTransaction().begin();
 		
-		List<ArticleEntity> articles = em.createQuery("SELECT a  FROM Article a").getResultList();
+		List<ArticleEntity> articles = em.createQuery("SELECT a  FROM article a").getResultList();
 		em.getTransaction().commit();
 		
 		return articles;

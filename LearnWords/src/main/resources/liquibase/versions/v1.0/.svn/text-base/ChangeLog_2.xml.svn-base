@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="server_table_test_data" author="jaast"
+		context="v1.0,test">
+		<insert tableName="server">
+			<column name="id">1</column>
+			<column name="url">https://jira.atlassian.com</column>
+		</insert>
+		<insert tableName="server">
+			<column name="id">2</column>
+			<column name="url">https://test.url</column>
+		</insert>
+	</changeSet>
+	
+	<changeSet id="users_table_test_data" author="jaast"
+		context="v1.0,test">
+		<insert tableName="user_">
+			<column name="id">1</column>
+			<column name="login">admin</column>
+			<column name="name">Administrator</column>
+			<column name="password">8450eca01665516d9aeb5317764902b78495502637c96192c81b1683d32d691a0965cf037feca8b9ed9ee6fc6ab8f27fce8f77c4fd9b4a442a00fc317b8237e6</column>
+			<column name="email">admin@email.com</column>
+			<column name="user_role">admin</column>
+		</insert>
+		<insert tableName="user_">
+			<column name="id">2</column>
+			<column name="login">testuser</column>
+			<column name="name">Test User</column>
+			<column name="password">test</column>
+			<column name="email">user@email.com</column>
+			<column name="server_id">1</column>
+		</insert>
+	</changeSet>
+	
+	<changeSet id="project_table_test_data" author="jaast"
+		context="v1.0,test">
+		<insert tableName="project">
+			<column name="id">1</column>
+			<column name="key">DEMO</column>
+			<column name="name">Demo Project</column>
+			<column name="server_id">2</column>
+		</insert>
+		<insert tableName="project">
+			<column name="id">2</column>
+			<column name="key">STASH0</column>
+			<column name="name">Stash0</column>
+			<column name="server_id">1</column>
+		</insert>
+		<insert tableName="project">
+			<column name="id">3</column>
+			<column name="key">CRUC0</column>
+			<column name="name">Crucible0</column>
+			<column name="server_id">1</column>
+		</insert>
+	</changeSet>
+	
+	<changeSet id="permission_table_test_data" author="jaast"
+		context="v1.0,test">
+		<insert tableName="permission">
+			<column name="user_id">1</column>
+			<column name="project_id">1</column>
+		</insert>
+		<insert tableName="permission">
+			<column name="user_id">1</column>
+			<column name="project_id">2</column>
+		</insert>
+		<insert tableName="permission">
+			<column name="user_id">1</column>
+			<column name="project_id">3</column>
+		</insert>
+		<insert tableName="permission">
+			<column name="user_id">2</column>
+			<column name="project_id">2</column>
+		</insert>
+		<insert tableName="permission">
+			<column name="user_id">2</column>
+			<column name="project_id">3</column>
+		</insert>	
+	</changeSet>
+
+	<changeSet id="assignee_table_test_data" author="jaast"
+		context="v1.0,test">
+		<insert tableName="assignee">
+			<column name="id">1</column>
+			<column name="name">Paul Watson [Atlassian]</column>
+			<column name="email">pwatson at atlassian dot com</column>
+		</insert>
+		<insert tableName="assignee">
+			<column name="id">2</column>
+			<column name="name">Seb Ruiz [Atlassian]</column>
+			<column name="email">sruiz at atlassian dot com</column>
+		</insert>
+	</changeSet>
+	
+	<changeSet id="issue_table_test_data" author="jaast"
+		context="v1.0,test">
+		<insert tableName="issue">
+			<column name="id">1</column>
+			<column name="key">STASH0-2524</column>
+			<column name="issue_type">New Feature</column>
+			<column name="status">To Do</column>
+			<column name="created">2014-10-02 03:20:40</column>
+			<column name="updated">2014-10-15 03:20:40</column>
+			<column name="priority">Minor</column>
+			<column name="summary">Stash startup pages have no links or instructions</column>
+			<column name="time_spent">180</column>
+			<column name="version">1.0.1</column>
+			<column name="project_id">2</column>
+			<column name="assignee_id">1</column>
+		</insert>
+		<insert tableName="issue">
+			<column name="id">2</column>
+			<column name="key">CRUC0-3671</column>
+			<column name="issue_type">Bug</column>
+			<column name="status">Closed</column>
+			<column name="created">2014-11-05 02:20:40</column>
+			<column name="updated">2014-11-17 02:20:40</column>
+			<column name="priority">Minor</column>
+			<column name="summary">Replace all project/repo/user selects with autocomplete inputs</column>
+			<column name="time_spent">220</column>
+			<column name="version">2.1.1</column>
+			<column name="project_id">3</column>
+			<column name="assignee_id">2</column>
+		</insert>
+	</changeSet>
+	
+	<changeSet id="jira-stub-server" author="chursin"
+		context="v1.0,test">
+		<insert	catalogName="public"
+			schemaName="public"
+			tableName="server">
+			<column name="id" value="3" />
+			<column name="url" value="https://alpha.com" />
+		</insert>
+	</changeSet>
+	
+	<changeSet id="jira-stub-user" author="chursin"
+		context="v1.0,test">
+		<insert catalogName="public"
+			schemaName="public" 
+			tableName="user_">
+			<column name="login" value="pojo"/>
+			<column name="password" value="123"/>
+			<column name="server_id" value="3"></column>
+		</insert>
+	</changeSet>
+	
+	<changeSet id="worklog_table_test_data" author="buslov"
+		context="v1.0,test">
+		<insert tableName="worklog">
+			<column name="self">https://jira.atlassian.com/rest/api/2/issue/182560/worklog/120597</column>
+			<column name="author">Paul Watson [Atlassian]</column>
+			<column name="created">2014-10-03 07:18:38</column>
+			<column name="updated">2014-10-03 07:18:38</column>
+			<column name="started">2014-10-03 07:15:00</column>
+			<column name="time_spent">60</column>
+			<column name="issue_id">1</column>
+		</insert>
+		<insert tableName="worklog">
+			<column name="self">https://jira.atlassian.com/rest/api/2/issue/182560/worklog/120598</column>
+			<column name="author">Paul Watson [Atlassian]</column>
+			<column name="created">2014-10-07 09:25:00</column>
+			<column name="updated">2014-10-07 09:25:00</column>
+			<column name="started">2014-10-07 09:20:00</column>			
+			<column name="time_spent">120</column>
+			<column name="issue_id">1</column>
+		</insert>
+		<insert tableName="worklog">
+			<column name="self">https://jira.atlassian.com/rest/api/2/issue/108045/worklog/91899</column>
+			<column name="author">Seb Ruiz [Atlassian]</column>
+			<column name="created">2014-11-06 10:18:38</column>
+			<column name="updated">2014-11-06 10:18:38</column>
+			<column name="started">2014-11-06 10:15:00</column>		
+			<column name="time_spent">120</column>
+			<column name="issue_id">2</column>
+		</insert>
+		<insert tableName="worklog">
+			<column name="self">https://jira.atlassian.com/rest/api/2/issue/108045/worklog/91902</column>
+			<column name="author">Nick Pellow [Atlassian]</column>
+			<column name="created">2014-11-07 09:25:00</column>
+			<column name="updated">2014-11-07 09:25:00</column>
+			<column name="started">2014-11-07 09:20:00</column>			
+			<column name="time_spent">100</column>
+			<column name="issue_id">2</column>
+		</insert>
+	</changeSet>
+	
+</databaseChangeLog>

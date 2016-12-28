@@ -13,29 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.learnwords.entity.ArticleEntity;
-import com.learnwords.entity.DictionaryEntity;
+import com.learnwords.entity.WordEntity;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class LearnWordsApplicationTests {
 	
-	public EntityManager em = Persistence.createEntityManagerFactory("general").createEntityManager();
-
-	@Test
-	public void contextLoads() {
-		ArticleEntity ae = new ArticleEntity();
-		ae.setTitle("Title");
-		ae.setContent("Content");
-		em.getTransaction().begin();
-		ae = em.merge(ae);
-		
-		DictionaryEntity de = new DictionaryEntity();
-		de.setArticle_id(ae.getId());
-		de.setWord("Hello");
-		de.setTranslation("Привет");
-		
-		em.persist(de);
-        em.getTransaction().commit();
-	}
 
 }

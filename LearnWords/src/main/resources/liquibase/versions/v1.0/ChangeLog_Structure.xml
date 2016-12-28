@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+		
+		<changeSet id="learner_table" author="aashrafu" context="initial"> 
+			<createTable tableName="learner">
+				<column name="id" autoIncrement="true" type="int"> 
+					<constraints primaryKey="true" primaryKeyName="PK_learner"/> 
+				</column>
+				<column name="username" type="varchar(100)"> 
+					<constraints unique="false" nullable="false"/> 
+				</column>
+				<column name="password" type="varchar(100)"> 
+					<constraints unique="false" nullable="false"/> 
+				</column>
+			</createTable>
+		</changeSet>	
+		
+		<changeSet id="article_table" author="aashrafu" context="initial"> 
+			<createTable tableName="article">
+				<column name="id" autoIncrement="true" type="int"> 
+					<constraints primaryKey="true" primaryKeyName="PK_article"/> 
+				</column>
+				<column name="title" type="varchar(100)"> 
+					<constraints unique="false" nullable="false"/> 
+				</column>
+				<column name="content" type="text"> 
+					<constraints unique="false" nullable="true"/> 
+				</column>
+			</createTable>
+		</changeSet>
+		
+		<changeSet id="word_table" author="aashrafu" context="initial"> 
+			<createTable tableName="word">
+				<column name="id" autoIncrement="true" type="int"> 
+					<constraints primaryKey="true" primaryKeyName="PK_word"/> 
+				</column>
+				<column name="original" type="varchar(100)"> 
+					<constraints unique="false" nullable="false"/> 
+				</column>
+				<column name="translation" type="varchar(100)"> 
+					<constraints unique="false" nullable="false"/> 
+				</column>
+				<column name="article_id" type="int"> 
+					<constraints nullable="true" foreignKeyName="FK_word_article"
+						referencedTableName="article" referencedColumnNames="id"/> 
+				</column>
+			</createTable>
+		</changeSet>
+		
+		<changeSet id="training_table" author="aashrafu" context="initial"> 
+			<createTable tableName="training">
+				<column name="id" autoIncrement="true" type="int"> 
+					<constraints primaryKey="true" primaryKeyName="PK_training"/> 
+				</column>
+				<column name="training_name" type="varchar(100)"> 
+					<constraints unique="false" nullable="false"/> 
+				</column>
+				<column name="word_id" type="int"> 
+					<constraints nullable="false" foreignKeyName="FK_training_word"
+						referencedTableName="word" referencedColumnNames="id"/> 
+				</column>
+			</createTable>
+		</changeSet>
+
+</databaseChangeLog>

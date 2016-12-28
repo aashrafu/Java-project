@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+		<changeSet id="server_table" author="jaast" context="initial"> 
+			<createTable tableName="server">
+				<column name="id" autoIncrement="true" type="int"> 
+					<constraints primaryKey="true" primaryKeyName="PK_server"/> 
+				</column>
+				<column name="url" type="varchar(200)"> 
+					<constraints unique="true" uniqueConstraintName="UQ_server_url" nullable="false"/> 
+				</column>
+			</createTable>
+		</changeSet>	
+
+		<changeSet id="user_table" author="jaast" context="initial">
+			<createTable tableName="user_">
+				<column name="id" autoIncrement="true" type="int">
+					<constraints primaryKey="true" primaryKeyName="PK_user"/>
+				</column>
+				<column name="login" type="varchar(100)"> 
+					<constraints unique="true" uniqueConstraintName="UQ_user_login" nullable="false"/> 
+				</column>
+				<column name="name" type="varchar(100)">
+					<constraints unique="false" uniqueConstraintName="UQ_user_name" nullable="true"/> 
+				</column>
+				<column name="password" type="varchar(1024)"> 
+					<constraints unique="false" uniqueConstraintName="UQ_user_password" nullable="true"/> 
+				</column>
+				<column name="email" type="varchar(100)"> 
+					<constraints unique="false" uniqueConstraintName="UQ_user_email" nullable="true"/> 
+				</column>
+				<column name="user_role" defaultValue="user" type="varchar(20)"> 
+					<constraints unique="false" uniqueConstraintName="UQ_user_user_role" nullable="false"/> 
+				</column>
+				<column name="server_id" type="int"> 
+					<constraints nullable="true" foreignKeyName="FK_user_server"
+						referencedTableName="server" referencedColumnNames="id"/> 
+				</column>
+			</createTable>
+		</changeSet>	
+		 
+		<changeSet id="project_table" author="jaast" context="initial"> 
+			<createTable tableName="project"> 
+				<column name="id" autoIncrement="true" type="int"> 
+					<constraints primaryKey="true" primaryKeyName="PK_project"/> 
+				</column> 
+				<column name="key" type="varchar(100)"> 
+					<constraints nullable="false"/> 
+				</column> 			
+				<column name="name" type="varchar(100)"> 
+					<constraints unique="true" uniqueConstraintName="UQ_project_name" nullable="false"/> 
+				</column>
+				<column name="server_id" type="int"> 
+					<constraints nullable="false" foreignKeyName="FK_project_server"
+						referencedTableName="server" referencedColumnNames="id"/> 
+				</column>  
+			</createTable>
+		</changeSet>
+		
+		<changeSet id="permission_table" author="jaast" context="initial">
+			<createTable tableName="permission">
+				<column name="id" autoIncrement="true" type="int">
+					<constraints primaryKey="true" primaryKeyName="PK_permission"/>
+				</column>			
+				<column name="user_id" type="int"> 
+					<constraints nullable="false" foreignKeyName="FK_permission_user"
+						referencedTableName="user_" referencedColumnNames="id"/> 
+				</column>
+				<column name="project_id" type="int"> 
+					<constraints nullable="false" foreignKeyName="FK_permission_project"
+						referencedTableName="project" referencedColumnNames="id"/> 
+				</column>
+			</createTable>
+		</changeSet>	
+		
+		<changeSet id="assignee_table" author="jaast" context="initial">
+			<createTable tableName="assignee">
+				<column name="id" autoIncrement="true" type="int">
+					<constraints primaryKey="true" primaryKeyName="PK_assignee"/>
+				</column>
+				<column name="name" type="varchar(100)"> 
+					<constraints nullable="false"/> 
+				</column>
+				<column name="email" type="varchar(100)"> 
+					<constraints unique="false" uniqueConstraintName="UQ_assignee_email" nullable="false"/> 
+				</column>
+			</createTable>
+		</changeSet>	
+		
+		<changeSet id="issue_table" author="jaast" context="initial">
+			<createTable tableName="issue">
+				<column name="id" autoIncrement="true" type="int">
+					<constraints primaryKey="true" primaryKeyName="PK_issue"/>
+				</column>
+				<column name="key" type="varchar(100)"> 
+					<constraints nullable="false"/> 
+				</column>
+				<column name="issue_type" type="varchar(20)"> 
+					<constraints nullable="false"/> 
+				</column>
+				<column name="status" type="varchar(20)"> 
+					<constraints nullable="false"/> 
+				</column>
+				<column name="created" type="datetime"> 
+					<constraints nullable="false"/> 
+				</column>
+				<column name="updated" type="datetime"> 
+					<constraints nullable="false"/> 
+				</column>
+				<column name="due" type="datetime"> 
+					<constraints nullable="true"/> 
+				</column>
+				<column name="resolved" type="datetime"> 
+					<constraints nullable="true"/> 
+				</column>
+				<column name="priority" type="varchar(50)"> 
+					<constraints nullable="true"/> 
+				</column>
+				<column name="component" type="varchar(50)"> 
+					<constraints nullable="true"/> 
+				</column>
+				<column name="summary" type="varchar(1024)"> 
+					<constraints nullable="true"/> 
+				</column>				
+				<column name="time_spent" type="int"> 
+					<constraints nullable="false"/> 
+				</column>
+				<column name="version" type="varchar(20)"> 
+					<constraints nullable="true"/> 
+				</column>
+				<column name="project_id" type="int"> 
+					<constraints nullable="false" foreignKeyName="FK_issue_project"
+						referencedTableName="project" referencedColumnNames="id"/> 
+				</column>
+				<column name="assignee_id" type="int"> 
+					<constraints nullable="false" foreignKeyName="FK_issue_assignee"
+						referencedTableName="assignee" referencedColumnNames="id"/> 
+				</column>			
+			</createTable>		
+		</changeSet>
+		
+		<changeSet id="worklog_table" author="buslov" context="initial">
+			<createTable tableName="worklog">
+				<column name="id" autoIncrement="true" type="int">
+					<constraints primaryKey="true" primaryKeyName="PK_worklog"/>
+				</column>
+				<column name="self" type="varchar(255)">
+					<constraints unique="true" uniqueConstraintName="UQ_worklog_self" nullable="false"/>
+				</column>
+				<column name="author" type="varchar(100)"> 
+					<constraints nullable="false"/> 
+				</column>
+				<column name="created" type="datetime"> 
+					<constraints nullable="false"/> 
+				</column>
+				<column name="updated" type="datetime"> 
+					<constraints nullable="false"/> 
+				</column>
+				<column name="started" type="datetime"> 
+					<constraints nullable="false"/> 
+				</column>
+				<column name="time_spent" type="int"> 
+					<constraints nullable="false"/> 
+				</column>
+				<column name="issue_id" type="int"> 
+					<constraints nullable="false" foreignKeyName="FK_worklog_issue"
+						referencedTableName="issue" referencedColumnNames="id"/> 
+				</column>
+			</createTable>
+		</changeSet>
+
+</databaseChangeLog>

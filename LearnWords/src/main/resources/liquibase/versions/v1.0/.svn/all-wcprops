@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/221/trunk/src/main/resources/liquibase/versions/v1.1
+END
+ChangeLog_1.xml
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/221/trunk/src/main/resources/liquibase/versions/v1.1/ChangeLog_1.xml
+END
+changelog.xml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/219/trunk/src/main/resources/liquibase/versions/v1.1/changelog.xml
+END
+ChangeLog_2.xml
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/173/trunk/src/main/resources/liquibase/versions/v1.1/ChangeLog_2.xml
+END

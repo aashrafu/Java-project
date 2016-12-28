@@ -11,4 +11,5 @@ public interface ArticleService {
 	public Article getById(int id);
 	public String makeArticleTagged(Article article);
 	public String sendGet(String word);
+	public String translateStub(String word);
 }

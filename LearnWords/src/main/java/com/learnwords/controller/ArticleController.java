@@ -10,15 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.learnwords.domain.Article;
-import com.learnwords.domain.Dictionary;
+import com.learnwords.domain.Word;
 import com.learnwords.service.ArticleService;
-import com.learnwords.service.DictionaryService;
+import com.learnwords.service.WordService;
 import com.learnwords.utils.Ajax;
 import com.learnwords.utils.RestException;
 
@@ -29,8 +31,8 @@ public class ArticleController {
 	@Qualifier("articleService")
 	private ArticleService articleService;
 	@Autowired
-	@Qualifier("dictionaryService")
-	private DictionaryService dictionaryService;
+	@Qualifier("wordService")
+	private WordService wordService;
 	
 	@RequestMapping("/index")
 	public String articleList(Map<String, Object> map) {
@@ -38,19 +40,15 @@ public class ArticleController {
 		List<Article> articles = articleService.getAll();
 		map.put("articleList", articles);
 		
+		
 		return "articleList";
 	}
 	
 	@RequestMapping("/newArticle")
-	public String newArticle(Map<String, Object> map) {	
+	public String newArticle(Map<String, Object> model) {	
+		model.put("article", new Article());
 		
 		return "newArticle";
-	}
-	
-	@RequestMapping("/matchesTraining")
-	public String matchesTraining(Map<String, Object> map) {	
-		
-		return "matchesTraining";
 	}
 	
 	@RequestMapping(value = "/viewArticle", method = RequestMethod.GET)
@@ -66,25 +64,24 @@ public class ArticleController {
 	}
 
 	@RequestMapping(value = "/translate", method = RequestMethod.POST)
-	public @ResponseBody Map<String, String> translate(@RequestParam("word") String word, @RequestParam("article") int article) throws RestException {
+	public @ResponseBody Map<String, String> translate(@RequestParam("word") String originalWord, @RequestParam("article") int articleId) throws RestException {
 		try {
-						
-			Dictionary dictionary = new Dictionary();
-			dictionary.setWord(word);
-			dictionary.setArticle(articleService.getById(article));
-			Dictionary existingDictionary = dictionaryService.get(dictionary);
-			if(existingDictionary != null) 
+				
+			Article article = articleService.getById(articleId);
+			originalWord = originalWord.trim();
+			Word word = wordService.getByOriginal(originalWord);
+			if(word == null) 
 			{
-				dictionary.setTranslation(existingDictionary.getTranslation());
-			} else {
-				String translation = articleService.sendGet(word);
-				dictionary.setTranslation(translation);
-				dictionaryService.persist(dictionary);
+				word = new Word();
+				word.setOriginal(originalWord);
+				word.setTranslation(articleService.translateStub(originalWord));
+				word.setArticle(article);
+				wordService.persist(word);
 			}			
 			
 			Map<String, String> response = new HashMap<String, String>();
 	        response.put("result", "success");
-	        response.put("translation", dictionary.getTranslation());
+	        response.put("translation", word.getTranslation());
 			
 			return response;
 		} catch (Exception e) {
@@ -92,19 +89,12 @@ public class ArticleController {
 		}
 	}
 	
-	@RequestMapping(value = "/persist", method = RequestMethod.POST)
-	public @ResponseBody Map<String, Object> persist(@RequestParam("title") String title, @RequestParam("content") String content) throws RestException {
-		try {
-			if (title == null || title.equals("")) {
-				return Ajax.emptyResponse();
-			}
-			Article article = new Article(title);
-			article.setContent(content);
-			
-			articleService.persist(article);
-			return Ajax.emptyResponse();
-		} catch (Exception e) {
-			throw new RestException(e);
-		}
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public String addArticle(@ModelAttribute("contact") Article article,
+		BindingResult result) throws RestException {
+
+		articleService.persist(article);
+		
+		return "redirect:/index";
 	}
 }

@@ -10,23 +10,18 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.learnwords.controller.ArticleController;
 import com.learnwords.dao.ArticleDAO;
 import com.learnwords.domain.Article;
 import com.learnwords.entity.ArticleEntity;
-import com.learnwords.repository.ArticleRepositoryImpl;
 
 @Service("articleService")
 public class ArticleServiceImpl implements ArticleService {
 	
 	private static final Logger LOG = Logger.getLogger(ArticleController.class);
 
-	@Autowired
-	@Qualifier("articleRepository")
-	private ArticleRepositoryImpl articleRepository;
 	@Autowired
 	private ArticleDAO<ArticleEntity> articleDAO;
 
@@ -62,6 +57,7 @@ public class ArticleServiceImpl implements ArticleService {
 		Article article = new Article(entity.getTitle());
 		article.setId(entity.getId());
 		article.setContent(entity.getContent());
+		article.setDescription(entity.getContent().substring(0, Math.min(200, entity.getContent().length())));
 
 		return article;
 	}
@@ -105,4 +101,8 @@ public class ArticleServiceImpl implements ArticleService {
 		return response.toString();
 	}
 
+	public String translateStub(String word) {
+		
+		return word;
+	}
 }

@@ -12,20 +12,17 @@
 <div class="container">
 	<div class="row row-offcanvas row-offcanvas-right">
 	 	<div class="col-xs-12 col-sm-9">
-	 	<a href="/newArticle" class="btn btn-primary">Add new article</a>
-	 	
-			<c:if test="${!empty articleList}">
-				<div class="row">
-				<c:forEach items="${articleList}" var="article">
-			        <div class="col-lg-4">
-			          <h2>${article.title}</h2>
-			          <p class="text-danger">${article.description}</p>
-			          <p><a class="btn btn-primary" href="/viewArticle?id=${article.id}" role="button">View details »</a></p>
-			        </div>
+	 		<center><h2>Original word</h2>
+	 		<br>
+			<div class="list-group">
+			<%! int i = 0; %> 
+			  <c:if test="${!empty translationList}">
+	 			<c:forEach items="${translationList}" var="translation">
+			       <a href="#" class="list-group-item" style="width:400px;">${translation}</a>
 			    </c:forEach>
-			    </div>
-			</c:if>
-			
+	 		</c:if>
+			</div>
+			</center>
 		</div>
 		<jsp:include page="templates/sidebar.jsp" />
 	</div>

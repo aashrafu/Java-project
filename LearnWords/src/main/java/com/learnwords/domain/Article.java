@@ -7,6 +7,10 @@ public class Article implements DomainModel{
 	private int id;
 	private String title;
 	private String content;
+	private String description;
+	
+	public Article() {
+	}
 	
 	public Article(String title) {
 		super();
@@ -41,6 +45,14 @@ public class Article implements DomainModel{
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override

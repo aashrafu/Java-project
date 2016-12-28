@@ -19,6 +19,8 @@ import com.learnwords.LearnWordsApplication;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import liquibase.integration.spring.SpringLiquibase;
+
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackageClasses = LearnWordsApplication.class)
@@ -50,23 +52,17 @@ public class JpaConfig implements TransactionManagementConfigurer {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean configureEntityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-        entityManagerFactoryBean.setDataSource(configureDataSource());
-        entityManagerFactoryBean.setPackagesToScan("com.learnwords");
-        entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-
-        Properties jpaProperties = new Properties();
-        jpaProperties.put(org.hibernate.cfg.Environment.DIALECT, dialect);
-        jpaProperties.put(org.hibernate.cfg.Environment.HBM2DDL_AUTO, hbm2ddlAuto);
-        entityManagerFactoryBean.setJpaProperties(jpaProperties);
-
-        return entityManagerFactoryBean;
-    }
-
-    @Bean
     public PlatformTransactionManager annotationDrivenTransactionManager() {
         return new JpaTransactionManager();
     }
 
+    @Bean
+    public SpringLiquibase liquibase(DataSource dataSource) {
+        SpringLiquibase sl = new SpringLiquibase();
+        sl.setDataSource(dataSource);
+        sl.setContexts("initial");
+        sl.setChangeLog("classpath:/liquibase/master.xml");
+        sl.setShouldRun(true);
+        return sl;
+    }
 }

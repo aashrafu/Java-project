@@ -14,13 +14,15 @@
 	 	<div class="col-xs-12 col-sm-9">
 			<div class="jumbotron">
 				<div id="result"></div>
-	            <h3>New article</h3>
-	           	 <div>Title: </div>
-	          	 <input type="text" class="form-control" placeholder="Text input">
-	          	 <div>Content: </div>
-	          	 <textarea class="form-control" rows="7"></textarea>
-	          	 <br></br>
-	          	 <a id="save" href="">Save</a>		
+				<form:form method="post" action="add" commandName="article">
+		            <h3>New article</h3>
+		           	 <div>Title: </div>
+		          	 <form:input type="text" path="title" class="form-control"/>
+		          	 <div>Content: </div>
+		          	 <form:textarea path="content" class="form-control" rows="7"/>
+		          	 <br></br>
+		          	 <input type="submit" value="Save" />		
+	          	 </form:form>
 	         </div>	
 		</div>
 		<jsp:include page="templates/sidebar.jsp" />

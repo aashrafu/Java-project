@@ -8,14 +8,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity(name = "Article")
+@Entity(name = "article")
 public class ArticleEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "article_id", unique = true, nullable = false)
+	@Column(name = "id", unique = true, nullable = false)
 	private int id;
 	@Column(name = "title", nullable = false, length = 100)
 	private String title;
