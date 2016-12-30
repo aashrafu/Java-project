@@ -62,8 +62,13 @@ public class WordServiceImpl implements WordService {
 		wordDAO.save(entity);
 		
 		TrainingEntity trainingEntity = new TrainingEntity();
-		trainingEntity.setTrainingName(TrainingType.MATCHES_DE_RU.getName());
+		trainingEntity.setTrainingName(TrainingType.MATCHING_DE_RU.getName());
 		trainingEntity.setWord_id(entity.getId());
 		trainingDAO.save(trainingEntity);
+	}
+
+	@Override
+	public Word getRandomWordByTraining(TrainingType matchingDeRu) {
+		return convertToModel(wordDAO.findRandomByTraining(matchingDeRu));
 	}
 }

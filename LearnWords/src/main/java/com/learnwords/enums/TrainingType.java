@@ -1,7 +1,7 @@
 package com.learnwords.enums;
 
 public enum TrainingType {
-	MATCHES_DE_RU("MatchesDeRu"), MATCHES_RU_DE("MatchesRuDe");
+	MATCHING_DE_RU("MatchingDeRu"), MATCHING_RU_DE("MatchingRuDe");
 	
 	private String name;
 	

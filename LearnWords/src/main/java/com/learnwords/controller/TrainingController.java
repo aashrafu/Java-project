@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.learnwords.domain.Word;
+import com.learnwords.enums.TrainingType;
 import com.learnwords.service.ArticleService;
 import com.learnwords.service.WordService;
 
@@ -26,13 +27,14 @@ public class TrainingController {
 	
 	@RequestMapping("/matchingTraining")
 	public String matchesTraining(Map<String, Object> map) {	
-		Word word = wordService.getByOriginal("beim");
+		Word word = wordService.getRandomWordByTraining(TrainingType.MATCHING_DE_RU);
 		
 		List<String> translationOptions = wordService.getRandomTranslations(word);
 		Collections.shuffle(translationOptions);
 		
 		if(word != null) {
 			map.put("translationList", translationOptions);
+			map.put("word", word);
 		}
 		
 		return "matchingTraining";

@@ -3,13 +3,10 @@ package com.learnwords.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +18,6 @@ import com.learnwords.domain.Article;
 import com.learnwords.domain.Word;
 import com.learnwords.service.ArticleService;
 import com.learnwords.service.WordService;
-import com.learnwords.utils.Ajax;
 import com.learnwords.utils.RestException;
 
 @Controller

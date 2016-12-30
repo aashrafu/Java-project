@@ -12,13 +12,13 @@
 <div class="container">
 	<div class="row row-offcanvas row-offcanvas-right">
 	 	<div class="col-xs-12 col-sm-9">
-	 		<center><h2>Original word</h2>
+	 		<center><h2>${word.original}</h2>
 	 		<br>
 			<div class="list-group">
 			<%! int i = 0; %> 
 			  <c:if test="${!empty translationList}">
-	 			<c:forEach items="${translationList}" var="translation">
-			       <a href="#" class="list-group-item" style="width:400px;">${translation}</a>
+	 			<c:forEach items="${translationList}" var="translation">			
+			       <a id="<c:if test="${word.translation == translation}">correct</c:if>" class="list-group-item" style="width:400px;font-size:18px;cursor:pointer;">${translation}</a>
 			    </c:forEach>
 	 		</c:if>
 			</div>
@@ -27,5 +27,22 @@
 		<jsp:include page="templates/sidebar.jsp" />
 	</div>
 </div>
+<script type="text/javascript">
+$('#correct').click(function() {
+	alert(1);
+	/*$.ajax({
+		type : "POST",
+		cache : false,
+		url : '/checkTranslation',
+		data : {
+			'option' : $("#option").val()
+		},
+		success : function(response) {
+			
+		}
+	});*/
+
+});
+</script>
 </body>
 </html>
