@@ -31,4 +31,13 @@ public class TrainingDAO extends DAOGeneric<TrainingEntity>{
 		
 		return null;
 	}
+
+	public void remove(WordEntity word) {
+		em.getTransaction().begin();
+		
+		em.createQuery("DELETE FROM training t WHERE word_id='" + word.getId() +"'").executeUpdate();
+
+		em.getTransaction().commit();
+		
+	}
 }

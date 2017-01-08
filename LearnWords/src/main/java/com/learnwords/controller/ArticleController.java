@@ -19,6 +19,8 @@ import com.learnwords.domain.Word;
 import com.learnwords.service.ArticleService;
 import com.learnwords.service.WordService;
 import com.learnwords.utils.RestException;
+import com.learnwords.utils.ServiceException;
+import com.learnwords.utils.StringModifier;
 
 @Controller
 public class ArticleController {
@@ -60,14 +62,14 @@ public class ArticleController {
 	}
 
 	@RequestMapping(value = "/translate", method = RequestMethod.POST)
-	public @ResponseBody Map<String, String> translate(@RequestParam("word") String originalWord, @RequestParam("article") int articleId) throws RestException {
-		try {
-				
+	public @ResponseBody Map<String, String> translate(@RequestParam("word") String originalWord, @RequestParam("article") int articleId) {
+
 			Article article = articleService.getById(articleId);
-			originalWord = originalWord.trim();
-			Word word = wordService.getByOriginal(originalWord);
-			if(word == null) 
-			{
+			originalWord = StringModifier.removeSymbols(originalWord);
+			Word word;
+			try {
+				word = wordService.getByOriginal(originalWord);
+			} catch (ServiceException e) {
 				word = new Word();
 				word.setOriginal(originalWord);
 				word.setTranslation(articleService.translateStub(originalWord));
@@ -80,9 +82,6 @@ public class ArticleController {
 	        response.put("translation", word.getTranslation());
 			
 			return response;
-		} catch (Exception e) {
-			throw new RestException(e);
-		}
 	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)

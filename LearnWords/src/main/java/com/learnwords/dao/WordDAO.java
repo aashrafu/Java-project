@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.learnwords.entity.WordEntity;
 import com.learnwords.enums.TrainingType;
+import com.learnwords.utils.DAOException;
 
 @Repository
 public class WordDAO extends DAOGeneric<WordEntity>{
@@ -17,19 +18,19 @@ public class WordDAO extends DAOGeneric<WordEntity>{
 	}
 
 	@SuppressWarnings("unchecked")
-	public WordEntity findByOriginal(String original) {
+	public WordEntity findByOriginal(String original) throws DAOException {
 		em.getTransaction().begin();
 		
 		List<WordEntity> words = em.createQuery("SELECT w FROM word w WHERE original='" + original +"'").getResultList();
 
 		em.getTransaction().commit();
 		
-		if(words.size() > 0)
+		if(words.size() == 0)
 		{
-			return words.get(0);
+			throw new DAOException("Word entity by original " + original + " was not found!");
 		}
 		
-		return null;
+		return words.get(0);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -47,7 +48,7 @@ public class WordDAO extends DAOGeneric<WordEntity>{
 	}
 
 	@SuppressWarnings("unchecked")
-	public WordEntity findRandomByTraining(TrainingType matchingDeRu) {
+	public WordEntity findRandomByTraining(TrainingType matchingDeRu) throws DAOException {
 		em.getTransaction().begin();
 
 		List<String> originals = em.createNativeQuery(
@@ -57,10 +58,40 @@ public class WordDAO extends DAOGeneric<WordEntity>{
 
 		em.getTransaction().commit();
 
-		if (originals.size() > 0) {
-			return findByOriginal(originals.get(0));
+		if (originals.size() == 0) {
+			throw new DAOException("Word table is empty! No one row was returned.");
 		}
 
-		return null;
+		return findByOriginal(originals.get(0));
+	}
+
+	public void delete(String original) {
+		em.getTransaction().begin();
+		
+		em.createQuery("DELETE FROM word w WHERE original='" + original +"'");
+
+		em.getTransaction().commit();
+		
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<WordEntity> findAll() {
+		
+		em.getTransaction().begin();
+		
+		List<WordEntity> words = em.createQuery("SELECT w FROM word w").getResultList();
+
+		em.getTransaction().commit();
+		
+		return words;
+	}
+
+	public void removeWord(Integer id) {
+		
+		em.getTransaction().begin();
+		
+		em.createQuery("DELETE FROM word w WHERE id='" + id +"'").executeUpdate();
+
+		em.getTransaction().commit();
 	}
 }

@@ -1,14 +1,30 @@
 package com.learnwords.service;
 
-import java.util.Arrays;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class TrainingServiceImpl implements TrainingSerivce {
+import com.learnwords.dao.TrainingDAO;
+import com.learnwords.dao.WordDAO;
+import com.learnwords.entity.WordEntity;
+import com.learnwords.utils.DAOException;
 
+@Service("trainingService")
+public class TrainingServiceImpl implements TrainingService {
+
+	@Autowired
+	private TrainingDAO trainingDAO;
+	@Autowired
+	private WordDAO wordDAO;
+	
 	@Override
-	public List<String> getRandomTranslations() {
+	public void removeWord(String originalWord) {
+		try {
+			WordEntity word = wordDAO.findByOriginal(originalWord);
+			trainingDAO.remove(word);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
 		
-		return Arrays.asList("first", "second", "third");
 	}
 
 }

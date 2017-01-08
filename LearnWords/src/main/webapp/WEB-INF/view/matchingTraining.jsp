@@ -12,37 +12,46 @@
 <div class="container">
 	<div class="row row-offcanvas row-offcanvas-right">
 	 	<div class="col-xs-12 col-sm-9">
-	 		<center><h2>${word.original}</h2>
+	 	
+	 		<center><div id="original"><h2>${word.original}</h2></div>
 	 		<br>
 			<div class="list-group">
 			<%! int i = 0; %> 
 			  <c:if test="${!empty translationList}">
 	 			<c:forEach items="${translationList}" var="translation">			
-			       <a id="<c:if test="${word.translation == translation}">correct</c:if>" class="list-group-item" style="width:400px;font-size:18px;cursor:pointer;">${translation}</a>
+			       <a id="<c:if test='${word.translation == translation}'>correct</c:if>" href="javascript:saveResult()" class="list-group-item" style="width:400px;font-size:18px;cursor:pointer;">${translation}</a>
 			    </c:forEach>
 	 		</c:if>
 			</div>
+			<a href="javascript:location.reload()" class="list-group-item" style="width:300px;font-size:18px;cursor:pointer;">Next</a>
 			</center>
 		</div>
 		<jsp:include page="templates/sidebar.jsp" />
 	</div>
 </div>
 <script type="text/javascript">
-$('#correct').click(function() {
-	alert(1);
-	/*$.ajax({
+function saveResult() {
+	if($("#correct").hasClass("active")) return;
+	
+	var q = document.querySelectorAll(":hover");
+	var selectedTranslation = q[q.length - 1];
+	var correctTranslation = $("#correct")[0];
+	correctTranslation.className += " active";
+
+	$.ajax({
 		type : "POST",
 		cache : false,
-		url : '/checkTranslation',
+		url : '/saveResult',
 		data : {
-			'option' : $("#option").val()
+			'word' : original.textContent,
+			'isCorrect' : selectedTranslation.innerHTML == correctTranslation.innerHTML
 		},
 		success : function(response) {
 			
 		}
-	});*/
+	});
 
-});
+};
 </script>
 </body>
 </html>

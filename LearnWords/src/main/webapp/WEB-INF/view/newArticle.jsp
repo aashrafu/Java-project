@@ -19,7 +19,7 @@
 		           	 <div>Title: </div>
 		          	 <form:input type="text" path="title" class="form-control"/>
 		          	 <div>Content: </div>
-		          	 <form:textarea path="content" class="form-control" rows="7"/>
+		          	 <form:textarea path="content" class="form-control" rows="14"/>
 		          	 <br></br>
 		          	 <input type="submit" value="Save" />		
 	          	 </form:form>

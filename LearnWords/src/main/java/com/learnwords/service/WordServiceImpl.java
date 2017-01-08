@@ -1,5 +1,6 @@
 package com.learnwords.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +12,16 @@ import com.learnwords.domain.Word;
 import com.learnwords.entity.TrainingEntity;
 import com.learnwords.entity.WordEntity;
 import com.learnwords.enums.TrainingType;
+import com.learnwords.utils.DAOException;
+import com.learnwords.utils.ServiceException;
 
 @Service("wordService")
 public class WordServiceImpl implements WordService {
 
 	@Autowired
-	WordDAO wordDAO;
+	private WordDAO wordDAO;
 	@Autowired
-	TrainingDAO trainingDAO;
+	private TrainingDAO trainingDAO;
 
 	@Override
 	public List<String> getRandomTranslations(Word word) {
@@ -27,15 +30,25 @@ public class WordServiceImpl implements WordService {
 	}
 	
 	@Override
-	public Word get(Word word) {
-		WordEntity entity = wordDAO.findByOriginal(word.getOriginal());
+	public Word get(Word word) throws ServiceException {
+		WordEntity entity = null;
+		try {
+			entity = wordDAO.findByOriginal(word.getOriginal());
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
 		return convertToModel(entity);
 	}
 	
 
 	@Override
-	public Word getByOriginal(String original) {
-		WordEntity entity = wordDAO.findByOriginal(original);
+	public Word getByOriginal(String original) throws ServiceException {
+		WordEntity entity = null;
+		try {
+			entity = wordDAO.findByOriginal(original);
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
 		
 		return convertToModel(entity);
 	}
@@ -46,6 +59,7 @@ public class WordServiceImpl implements WordService {
 			return null;
 
 		Word word = new Word();
+		word.setId(entity.getId());
 		word.setOriginal(entity.getOriginal());
 		word.setTranslation(entity.getTranslation());
 
@@ -67,8 +81,33 @@ public class WordServiceImpl implements WordService {
 		trainingDAO.save(trainingEntity);
 	}
 
+	public void deleteWord(String original) {
+		wordDAO.delete(original);
+	}
+	
 	@Override
-	public Word getRandomWordByTraining(TrainingType matchingDeRu) {
-		return convertToModel(wordDAO.findRandomByTraining(matchingDeRu));
+	public Word getRandomWordByTraining(TrainingType matchingDeRu) throws ServiceException {
+		Word word = null;
+		try {
+			word = convertToModel(wordDAO.findRandomByTraining(matchingDeRu));
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
+		return word;
+	}
+
+	@Override
+	public List<Word> getAll() {
+		List<Word> wordList = new ArrayList<Word>();
+		for(WordEntity word : wordDAO.findAll()) {
+			wordList.add(convertToModel(word));
+		}
+	
+		return wordList;
+	}
+
+	@Override
+	public void removeWord(Integer id) {
+		wordDAO.removeWord(id);
 	}
 }

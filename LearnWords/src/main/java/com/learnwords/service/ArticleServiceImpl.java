@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,14 @@ import com.learnwords.entity.ArticleEntity;
 public class ArticleServiceImpl implements ArticleService {
 	
 	private static final Logger LOG = Logger.getLogger(ArticleController.class);
+	
+	private static final Pattern CLEAR_PATTERN = Pattern.compile("[\\s]+");
 
 	@Autowired
 	private ArticleDAO<ArticleEntity> articleDAO;
 
 	public String makeArticleTagged(Article article) {
-		List<String> words = Arrays.asList(article.getContent().split(" "));
+		List<String> words = Arrays.asList(article.getContent().split(CLEAR_PATTERN.pattern()));
 		StringBuilder sb = new StringBuilder();
 		for (String word : words) {
 			sb.append("<a href=\"javascript:translate()\">").append(word).append(" ").append("</a>");
@@ -56,7 +59,7 @@ public class ArticleServiceImpl implements ArticleService {
 	public Article convertToModel(ArticleEntity entity) {
 		Article article = new Article(entity.getTitle());
 		article.setId(entity.getId());
-		article.setContent(entity.getContent());
+		article.setContent(entity.getContent().replaceAll(".", ". "));
 		article.setDescription(entity.getContent().substring(0, Math.min(200, entity.getContent().length())));
 
 		return article;
@@ -71,7 +74,7 @@ public class ArticleServiceImpl implements ArticleService {
 		return articles;
 	}
 
-	public String sendGet(String word) {
+	public String translate(String word) {
 		StringBuffer response = new StringBuffer();
 		try { 
 			String url = "http://api.multillect.com/translate/plain/1.0/350?method=translate/api/translate&from=deu&to=rus&text="+word+"&sig=dc699cc607cb72c247154bb90cd9af56";

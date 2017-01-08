@@ -10,6 +10,6 @@ public interface ArticleService {
 	public List<Article> getAll();
 	public Article getById(int id);
 	public String makeArticleTagged(Article article);
-	public String sendGet(String word);
+	public String translate(String word);
 	public String translateStub(String word);
 }
